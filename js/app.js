@@ -1,16 +1,7 @@
 const carrito = document.querySelector('#carrito');
-
-
 const listaCarrito = document.querySelector('#lista-carrito tbody');
-
-
 const vaciarCarrito = document.querySelector('#vaciar-carrito');
-
-
-
 const listaCursos = document.querySelector('#lista-cursos');
-
-
 let articulosCarrito = [];
 
 cargarEventListener();
@@ -22,11 +13,16 @@ function cargarEventListener() {
     //ELIMINAR CURSO
     carrito.addEventListener('click', eliminarCurso);
 
-
     //VACIAR CURSO
     vaciarCarrito.addEventListener('click', () => {
         articulosCarrito = [];
         limpiarHTML();
+    });
+
+    document.addEventListener('DOMContentLoaded',()=>{
+        articulosCarrito = JSON.parse(localStorage.getItem('articulos')) || [];
+
+        carritoHTML();
     });
 }
 
@@ -77,10 +73,7 @@ function leerDatosCurso(curso) {
         articulosCarrito = [...articulosCarrito, infoCurso];
     }
 
-
-
     carritoHTML();
-
 }
 
 //MOSTRAR LAS COMPRAS EN EL CARRITO
@@ -116,10 +109,15 @@ function carritoHTML() {
         listaCarrito.appendChild(row);
     });
 
-
+    //Sincronizar LocalStorage con la seleccion de Carrito
+    sincronizarLocalStorage();
 
 }
 
+function sincronizarLocalStorage()
+{
+    localStorage.setItem('articulos',JSON.stringify(articulosCarrito));
+}
 
 function limpiarHTML() {
     //1ERA FORMA DE ELIMINAR PERO MAS LENTA
